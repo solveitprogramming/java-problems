@@ -10,9 +10,11 @@ import java.util.function.Function;
 public class PrimerNumber {
 
     public static void main(String[] args) {
-        execution(PrimerNumber::isPrimeEvenFaster);
-        execution(PrimerNumber::isPrimeFaster);
-//        execution(PrimerNumber::isPrime);
+//        execution(PrimerNumber::isPrimerFastest);
+//        execution(PrimerNumber::isPrimeEvenFaster);
+//        execution(PrimerNumber::isPrimeFaster);
+        findBiggest(PrimerNumber::isPrimerFastest);
+        findBiggest(PrimerNumber::isPrimeEvenFaster);
     }
 
     public static Set<Integer> getPrimerNumbers() {
@@ -38,18 +40,31 @@ public class PrimerNumber {
         }
     }
 
-    public static void execution(Function<Long, Boolean> isPrime) {
+    public static void findBiggest(Function<Long, Boolean> isPrime) {
         long startTime = System.currentTimeMillis();
-        int counter = 0;
-        long startLong = (Long.MAX_VALUE / 4);
+        long biggest = 0;
+        long startLong = (Long.MAX_VALUE / 2);
         if (startLong % 2 == 0) {
-            startLong = startTime - 1;
+            startLong = startLong - 1;
         }
         for (long i = startLong; i >= 2; i -= 2) {
             boolean primeNumber = isPrime.apply(i);
             if (primeNumber) {
-                System.out.println(i);
+                biggest = i;
                 break;
+            }
+        }
+        long endTime = System.currentTimeMillis();
+        System.out.printf("Biggest %d executed in %d ms%n", biggest, endTime - startTime);
+    }
+    public static void execution(Function<Long, Boolean> isPrime) {
+        long startTime = System.currentTimeMillis();
+        int counter = 0;
+        long startLong = 2000001;
+        for (long i = startLong; i >= 2; i -= 2) {
+            boolean primeNumber = isPrime.apply(i);
+            if (primeNumber) {
+                counter++;
             }
         }
         long endTime = System.currentTimeMillis();
@@ -71,6 +86,26 @@ public class PrimerNumber {
         return isPrime(number, (long) Math.sqrt(number) + 1);
     }
 
+    public static boolean isPrimerFastest(long number) {
+        if (number == 2 || number == 3) {
+            return true;
+        }
+
+        // Check whether n is divisible by 2 or 3
+        if (number % 2 == 0 || number % 3 == 0) {
+            return false;
+        }
+
+
+        for (long i = 5; i <= Math.sqrt(number); i = i + 6) {
+            if (number % i == 0 || number % (i + 2) == 0) {
+                return false;
+            }
+        }
+        return true;
+
+    }
+
 
     public static boolean isPrime(long number, long untilNumber) {
         if (number < 2) {
@@ -78,6 +113,9 @@ public class PrimerNumber {
         }
         if (number == 2) {
             return true;
+        }
+        if (number % 2 == 0) {
+            return false;
         }
         for (int i = 3; i < untilNumber; i++) {
             if (number % i == 0) {
