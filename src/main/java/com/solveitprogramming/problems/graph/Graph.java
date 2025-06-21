@@ -10,7 +10,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class Graph {
 
-    private Map<String, Set<String>> vertexMap = new HashMap<>();
+    private final Map<String, Set<String>> vertexMap = new HashMap<>();
 
     private final boolean uniDirectional;
 
@@ -41,6 +41,10 @@ public class Graph {
 
     public Set<String> getEdges(String vertex) {
         return vertexMap.getOrDefault(vertex, new HashSet<>());
+    }
+
+    public int numberOfVertices() {
+        return vertexMap.size();
     }
 
     private void printVertex(String vertex) {
